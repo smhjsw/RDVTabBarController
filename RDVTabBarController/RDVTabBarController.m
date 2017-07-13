@@ -57,6 +57,7 @@
     
     [self setTabBarHidden:self.isTabBarHidden animated:NO];
 }
+
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
     [self setTabBarHidden:self.isTabBarHidden animated:NO];
@@ -64,6 +65,10 @@
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
+    if ([self.selectedViewController isKindOfClass:[UINavigationController class]]) {
+        return ((UINavigationController *)self.selectedViewController).visibleViewController.preferredStatusBarStyle;
+    }
+    
     return self.selectedViewController.preferredStatusBarStyle;
 }
 
@@ -71,7 +76,7 @@
     return self.selectedViewController.preferredStatusBarUpdateAnimation;
 }
 
-- (NSUInteger)supportedInterfaceOrientations {
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
     UIInterfaceOrientationMask orientationMask = UIInterfaceOrientationMaskAll;
     for (UIViewController *viewController in [self viewControllers]) {
         if (![viewController respondsToSelector:@selector(supportedInterfaceOrientations)]) {
